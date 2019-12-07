@@ -10,6 +10,8 @@ def register(request):
         form = UserForm(request.POST)
         try:
             user = form.save(commit=False)
+            # password = user.cleaned_data.get('password')
+            user.set_password(user.password)
             user.save()
             return HttpResponse('success')
         except ValueError:
