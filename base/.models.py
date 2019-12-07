@@ -24,5 +24,4 @@ class Room(models.Model):
 
 
 class CustomUser(AbstractUser):
-    room = models.ForeignKey(Room, on_delete=models.PROTECT, null=True, blank=True)
     money = models.ForeignKey(Money, on_delete=models.CASCADE)
