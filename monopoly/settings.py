@@ -122,3 +122,5 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 AUTH_USER_MODEL = 'base.CustomUser'
+
+LOGIN_REDIRECT_URL = 'lobby'
