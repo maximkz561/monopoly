@@ -30,4 +30,4 @@ def lobby(request):
 @login_required
 def make_room(request):
     Room.objects.create()
-    return None
+    return redirect('lobby')

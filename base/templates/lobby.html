@@ -2,4 +2,7 @@
 
 {% block content %}
     <a href="{% url 'make_room' %}" class="btn btn-secondary">Make new room</a>
+    {% for room in rooms %}
+        {{ room }}
+    {% endfor %}
 {% endblock %}
