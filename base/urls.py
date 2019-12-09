@@ -8,4 +8,5 @@ urlpatterns = [
     path('registration', views.register, name='registration'),
     path('lobby', views.lobby, name='lobby'),
     path('', TemplateView.as_view(template_name='base.html')),
+    path('make_room', views.make_room, name='make_room')
 ]

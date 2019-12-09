@@ -3,3 +3,4 @@ from base.models import CustomUser, Room
 
 admin.site.register(CustomUser)
 admin.site.register(Room)
+# admin.site.register(Money)

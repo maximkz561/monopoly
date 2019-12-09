@@ -9,6 +9,7 @@
         <div class="page-header">
             {% if user.is_authenticated %}
                 <p class="top-menu">Hello {{ user.username }} <small>(<a href="{% url 'logout' %}">Log out</a>)</small></p>
+                <a href="{% url 'lobby' %}" class="btn btn-secondary">Lobby</a>
             {% else %}
                 <a href="{% url 'login' %}" class="btn btn-primary">Sign in</a>
                 <a href="{% url 'registration' %}" class="btn btn-secondary">Sign up</a>
