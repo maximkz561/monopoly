@@ -3,6 +3,9 @@
 {% block content %}
     <a href="{% url 'make_room' %}" class="btn btn-secondary">Make new room</a>
     {% for room in rooms %}
+        <div>
         {{ room }}
+        <a href="{% url 'join_room' room_id=room.id %}" class="btn btn-secondary">Join</a>
+        </div>
     {% endfor %}
 {% endblock %}

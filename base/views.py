@@ -29,5 +29,12 @@ def lobby(request):
 
 @login_required
 def make_room(request):
-    Room.objects.create()
+    Room.objects.create(owner=request.user)
     return redirect('lobby')
+
+
+def join_room(request, room_id):
+    user = request.user
+    user.room = get_object_or_404(Room, id=room_id)
+    user.save()
+    return HttpResponse('success')
