@@ -6,6 +6,9 @@
         <div>
         {{ room }}
         <a href="{% url 'join_room' room_id=room.id %}" class="btn btn-secondary">Join</a>
+        {% if user == room.owner %}
+            <a href="{% url 'del_room' room_id=room.id %}" class="btn btn-dark">Delete</a>
+        {% endif %}
         </div>
     {% endfor %}
 {% endblock %}
