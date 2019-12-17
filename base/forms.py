@@ -1,6 +1,6 @@
 from django import forms
 
-from base.models import CustomUser
+from base.models import CustomUser, Room
 
 
 class UserForm(forms.ModelForm):
@@ -18,3 +18,10 @@ class UserForm(forms.ModelForm):
     class Meta:
         model = CustomUser
         fields = ('username', 'password')
+
+
+class RoomForm(forms.ModelForm):
+
+    class Meta:
+        model = Room
+        fields = ('capacity', 'password', 'start_money', 'circle_money')

@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, Http404
 from django.shortcuts import render, redirect, get_object_or_404
-from base.forms import UserForm
+from base.forms import UserForm, RoomForm
 from base.models import CustomUser, Room
 
 
@@ -10,7 +10,6 @@ def register(request):
         form = UserForm(request.POST)
         try:
             user = form.save(commit=False)
-            # password = user.cleaned_data.get('password')
             user.set_password(user.password)
             user.save()
             return HttpResponse('success')
@@ -23,21 +22,38 @@ def register(request):
 
 @login_required
 def lobby(request):
-    rooms = Room.objects.all()
-    user = request.user
-    return render(request, 'lobby.html', {'rooms': rooms, 'user': user})
+    if request.method == 'POST':
+        form = RoomForm(request.POST)
+        room = form.save(commit=False)
+        room.save()
+        return HttpResponse('success')
+    else:
+        form = RoomForm()
+        rooms = Room.objects.all()
+        user = request.user
+        return render(request, 'lobby.html', {'rooms': rooms, 'user': user, 'form': form})
 
 
 @login_required
 def make_room(request):
-    Room.objects.create(owner=request.user)
+    form = RoomForm(request.POST)
+    room = form.save(commit=False)
+    room.owner = request.user
+    room.save()
     return redirect('lobby')
 
 
 @login_required
 def join_room(request, room_id):
+    room = get_object_or_404(Room, id=room_id)
+    if request.method == 'POST':
+        password = request.POST.get('password')
+        if room.password == password:
+            return HttpResponse('ok')
+        else:
+            return HttpResponse('net')
     user = request.user
-    user.room = get_object_or_404(Room, id=room_id)
+    user.room = room
     user.save()
     users = CustomUser.objects.filter(room_id=room_id)
     return render(request, 'room.html', {'users': users})
