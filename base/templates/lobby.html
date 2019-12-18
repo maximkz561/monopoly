@@ -11,7 +11,7 @@
         <div>
             {{ room }}
             {% if room.password %}
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#JoinRoom_{{ room }}">
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#JoinRoom_{{ room.id }}">
                     Join
                 </button>
             {% else %}
@@ -55,7 +55,7 @@
 
     {% for room in rooms %}
      <!-- Modal joying room -->
-        <div class="modal fade" id="JoinRoom_{{ room }}" tabindex="-1" role="dialog" aria-labelledby="JoinRoomLabel"
+        <div class="modal fade" id="JoinRoom_{{ room.id }}" tabindex="-1" role="dialog" aria-labelledby="JoinRoomLabel"
              aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -66,15 +66,15 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form method="POST" id="join_room_{{ room }}" class="post-form"
-                              action="{% url 'join_room' room_id=room %}">
+                        <form method="POST" id="join_room_{{ room.id }}" class="post-form"
+                              action="{% url 'join_room' room_id=room.id %}">
                             {% csrf_token %}
                             {{ form.password }}
                         </form>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" form="join_room_{{ room }}" class="btn btn-primary">Save changes</button>
+                        <button type="submit" form="join_room_{{ room.id }}" class="btn btn-primary">Save changes</button>
                     </div>
                 </div>
             </div>

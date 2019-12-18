@@ -1,4 +1,5 @@
 from django.contrib.auth.models import AbstractUser
+from django.core.validators import MinValueValidator
 from django.db import models
 
 from monopoly.settings import AUTH_USER_MODEL
@@ -6,9 +7,9 @@ from monopoly.settings import AUTH_USER_MODEL
 
 class Room(models.Model):
     owner = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='+')
-    active = models.BooleanField(True)
+    active = models.BooleanField(default=False)
     capacity = models.IntegerField(default=4)
-    members = models.IntegerField(default=0,)
+    members = models.IntegerField(default=0)
     password = models.CharField(max_length=10, blank=True, null=True, help_text='not necessary')
     start_money = models.IntegerField(default=15000000)
     circle_money = models.IntegerField(default=2000000)
@@ -16,14 +17,11 @@ class Room(models.Model):
     def __str__(self):
         return str(self.id)
 
-    def __init__(self):
-        if capac
-
 
 class CustomUser(AbstractUser):
     room = models.ForeignKey(Room, on_delete=models.PROTECT, null=True, blank=True)
     money = models.IntegerField(null=True, blank=True)
-    # ready = models.BooleanField(default=False)
+    ready = models.BooleanField(default=False)
 
     def circle(self):
         self.money += self.room.circle_money
@@ -37,3 +35,11 @@ class CustomUser(AbstractUser):
             recipient.save()
         else:
             raise Exception()
+
+    def increase(self, amount: int):
+        self.money += amount
+        self.save()
+
+    def reduce(self, amount: int):
+        self.money -= amount
+        self.save()

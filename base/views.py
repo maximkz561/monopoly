@@ -47,15 +47,13 @@ def make_room(request):
 def join_room(request, room_id):
     room = get_object_or_404(Room, id=room_id)
     if request.method == 'POST':
-        if room.password == request.POST.get('password'):
-            return HttpResponse('ok')
-        else:
-            return HttpResponse('net')
+        if room.password != request.POST.get('password'):
+            raise Exception()
     user = request.user
     user.room = room
     user.save()
     users = CustomUser.objects.filter(room_id=room_id)
-    return render(request, 'room.html', {'users': users})
+    return render_room(request, room)
 
 
 @login_required
@@ -78,3 +76,8 @@ def del_room(request, room_id):
         return redirect('lobby')
     else:
         raise Http404
+
+
+def render_room(request, room: Room):
+    users = CustomUser.objects.filter(room_id=room.id)
+    return render(request, 'room.html', {'users': users})
