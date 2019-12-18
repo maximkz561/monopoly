@@ -6,5 +6,10 @@
         <div>
         name: {{ user }}
         </div>
+{#        {% if user.ready == 'False' %}#}
+{#            <button type="button" class="btn btn-success" action="{% url 'ready' %}">Ready</button>#}
+{#        {% else %}#}
+{#            <button type="button" class="btn btn-danger" action="{% url 'ready' %}">Ready</button>#}
+{#        {% endif %}#}
     {% endfor %}
 {% endblock %}

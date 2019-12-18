@@ -47,8 +47,7 @@ def make_room(request):
 def join_room(request, room_id):
     room = get_object_or_404(Room, id=room_id)
     if request.method == 'POST':
-        password = request.POST.get('password')
-        if room.password == password:
+        if room.password == request.POST.get('password'):
             return HttpResponse('ok')
         else:
             return HttpResponse('net')
