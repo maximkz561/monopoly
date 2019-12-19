@@ -6,10 +6,10 @@
         <div>
         name: {{ user }}
         </div>
-{#        {% if user.ready == 'False' %}#}
-{#            <button type="button" class="btn btn-success" action="{% url 'ready' %}">Ready</button>#}
-{#        {% else %}#}
-{#            <button type="button" class="btn btn-danger" action="{% url 'ready' %}">Ready</button>#}
-{#        {% endif %}#}
+        {% if user.ready %}
+            <a href="{% url 'ready' %}" class="btn btn-success">Ready</a>
+        {% else %}
+            <a href="{% url 'ready' %}" class="btn btn-danger">Ready</a>
+        {% endif %}
     {% endfor %}
 {% endblock %}

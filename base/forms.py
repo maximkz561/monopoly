@@ -21,9 +21,9 @@ class UserForm(forms.ModelForm):
 
 
 class RoomForm(forms.ModelForm):
-    capacity = forms.IntegerField(max_value=6)
-    start_money = forms.IntegerField(min_value=100)
-    circle_money = forms.IntegerField(min_value=10)
+    # capacity = forms.IntegerField(max_value=6)
+    # start_money = forms.IntegerField(min_value=100)
+    # circle_money = forms.IntegerField(min_value=10)
 
     class Meta:
         model = Room

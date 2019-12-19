@@ -53,7 +53,7 @@ def join_room(request, room_id):
     user.room = room
     user.save()
     users = CustomUser.objects.filter(room_id=room_id)
-    return render_room(request, room)
+    return redirect(f'../room/{room_id}')
 
 
 @login_required
@@ -61,6 +61,7 @@ def quit(request):
     user = request.user
     if user.room:
         user.room = None
+        user.ready = False
         user.save()
         return redirect('lobby')
     else:
@@ -78,6 +79,29 @@ def del_room(request, room_id):
         raise Http404
 
 
-def render_room(request, room: Room):
-    users = CustomUser.objects.filter(room_id=room.id)
+def render_room(request, room_id):
+    users = CustomUser.objects.filter(room_id=room_id)
     return render(request, 'room.html', {'users': users})
+
+
+@login_required()
+def ready(request):
+    user = request.user
+    if user.ready:
+        user.ready = False
+        user.money = None
+    else:
+        user.ready = True
+        user.money = user.room.start_money
+    user.save()
+    room = user.room
+    users = CustomUser.objects.filter(room_id=room.id, ready=True)
+    if len(users) == room.capacity:
+        room.active = True
+        room.save()
+        return redirect(f'game/{room.id}')
+    return redirect(f'room/{room.id}')
+
+
+def start_game(request, room_id):
+    return render(request, 'game.html')

@@ -12,4 +12,7 @@ urlpatterns = [
     path('join_room/<int:room_id>', views.join_room, name='join_room'),
     path('del_room/<int:room_id>', views.del_room, name='del_room'),
     path('quit', views.quit, name='quit'),
+    path('room/<int:room_id>', views.render_room, name='room'),
+    path('ready', views.ready, name='ready'),
+    path('game/<int:room_id>', views.start_game, name='start_game')
 ]
