@@ -1,7 +1,8 @@
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, Http404
 from django.shortcuts import render, redirect, get_object_or_404
-from base.forms import UserForm, RoomForm
+
+from base.forms import UserForm, RoomForm, MoneyForm
 from base.models import CustomUser, Room
 
 
@@ -12,7 +13,7 @@ def register(request):
             user = form.save(commit=False)
             user.set_password(user.password)
             user.save()
-            return HttpResponse('success')
+            return redirect('lobby')
         except ValueError:
             return render(request, 'registration.html', {'form': form})
     else:
@@ -53,6 +54,8 @@ def join_room(request, room_id):
     user.room = room
     user.save()
     users = CustomUser.objects.filter(room_id=room_id)
+    if room.active:
+        return redirect(f'../game/{room_id}')
     return redirect(f'../room/{room_id}')
 
 
@@ -81,7 +84,7 @@ def del_room(request, room_id):
 
 def render_room(request, room_id):
     users = CustomUser.objects.filter(room_id=room_id)
-    return render(request, 'room.html', {'users': users})
+    return render(request, 'room.html', {'users': users, 'request_user': request.user})
 
 
 @login_required()
@@ -103,5 +106,27 @@ def ready(request):
     return redirect(f'room/{room.id}')
 
 
-def start_game(request, room_id):
-    return render(request, 'game.html')
+def game(request, room_id):
+    room = get_object_or_404(Room, id=room_id)
+    users = CustomUser.objects.filter(room=room).order_by('pk')
+    form = MoneyForm()
+    return render(request, 'game.html', {'room': room, 'users': users, 'request_user': request.user, 'form': form})
+
+
+def increase(request):
+    user = request.user
+    room = user.room
+    user.increase(room.circle_money)
+    user.save()
+    return redirect(f'game/{room.id}')
+
+
+def transfer_money(request, user_id):
+    amount = int(request.POST.get('money'))
+    recipient = get_object_or_404(CustomUser, id=user_id)
+    user = request.user
+    user.transfer(recipient, amount)
+    user.save()
+    recipient.save()
+    room = user.room
+    return redirect(f'../game/{room.id}')

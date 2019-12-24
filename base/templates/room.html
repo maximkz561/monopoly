@@ -4,12 +4,23 @@
     <a href="{% url 'quit' %}" class="btn btn-secondary">Quit</a>
     {% for user in users %}
         <div>
-        name: {{ user }}
+            name: {{ user }}
         </div>
         {% if user.ready %}
-            <a href="{% url 'ready' %}" class="btn btn-success">Ready</a>
+            {% if user == request_user %}
+                <input type="button" class="btn btn-success" value="Ready"
+                       onclick="location.href = '{% url 'ready' %}'">
+            {% else %}
+                <input type="button" class="btn btn-success" value="Ready" onclick="location.href = '{% url 'ready' %}'"
+                       disabled>
+            {% endif %}
         {% else %}
-            <a href="{% url 'ready' %}" class="btn btn-danger">Ready</a>
+            {% if user == request_user %}
+                <input type="button" class="btn btn-danger" value="Ready" onclick="location.href = '{% url 'ready' %}'">
+            {% else %}
+                <input type="button" class="btn btn-danger" value="Ready" onclick="location.href = '{% url 'ready' %}'"
+                       disabled>
+            {% endif %}
         {% endif %}
     {% endfor %}
 {% endblock %}

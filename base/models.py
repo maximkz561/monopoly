@@ -1,5 +1,4 @@
 from django.contrib.auth.models import AbstractUser
-from django.core.validators import MinValueValidator
 from django.db import models
 
 from monopoly.settings import AUTH_USER_MODEL
@@ -23,6 +22,9 @@ class CustomUser(AbstractUser):
     money = models.IntegerField(null=True, blank=True)
     ready = models.BooleanField(default=False)
 
+    # def __str__(self):
+    #     return self.id
+
     def circle(self):
         self.money += self.room.circle_money
         self.save()
@@ -43,3 +45,10 @@ class CustomUser(AbstractUser):
     def reduce(self, amount: int):
         self.money -= amount
         self.save()
+
+    @property
+    def friendly_money(self):
+        money = self.money
+        k = money // 1000 % 1000
+        m = money // 1000000
+        return f'{m}M {k}K'

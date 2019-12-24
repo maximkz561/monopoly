@@ -1,6 +1,5 @@
 from django.urls import path
 from django.views.generic import TemplateView
-from django.contrib.auth.views import LoginView
 
 from base import views
 
@@ -14,5 +13,7 @@ urlpatterns = [
     path('quit', views.quit, name='quit'),
     path('room/<int:room_id>', views.render_room, name='room'),
     path('ready', views.ready, name='ready'),
-    path('game/<int:room_id>', views.start_game, name='start_game')
+    path('game/<int:room_id>', views.game, name='start_game'),
+    path('increase', views.increase, name='increase'),
+    path('transfer_money/<int:user_id>', views.transfer_money, name='transfer_money')
 ]

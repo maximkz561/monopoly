@@ -1,4 +1,52 @@
 {% extends 'base.html' %}
 {% block content %}
-    <p>someblock</p>
+
+    <a href="{% url 'quit' %}" class="btn btn-secondary">Quit</a>
+    <a href="{% url 'increase' %}" class="btn btn-secondary">Circle</a>
+
+    {% for user in users %}
+        <div>
+            <p>{{ user.username }}</p>
+            <p>Money: {{ user.friendly_money }}</p>
+        </div>
+        <p>_____________________________________________________________________________________________________</p>
+        {% if user == request_user %}
+
+        {% else %}
+
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#Transfer_to_{{ user }}">
+                Transfer money
+            </button>
+        {% endif %}
+
+
+        <!-- Modal -->
+        <div class="modal fade" id="Transfer_to_{{ user }}" tabindex="-1" role="dialog"
+             aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle">Send money to {{ user }}</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form method="POST" id="transfer_to_{{ user }}" class="post-form"
+                              action="{% url 'transfer_money' user_id=user.id %}">
+                            {% csrf_token %}
+                            {{ form.money }}
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" form="transfer_to_{{ user }}" class="btn btn-primary">Save changes
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    {% endfor %}
 {% endblock %}

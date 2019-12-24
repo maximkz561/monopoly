@@ -28,3 +28,7 @@ class RoomForm(forms.ModelForm):
     class Meta:
         model = Room
         fields = ('capacity', 'password', 'start_money', 'circle_money')
+
+
+class MoneyForm(forms.Form):
+    money = forms.IntegerField()
