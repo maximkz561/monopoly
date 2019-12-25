@@ -9,7 +9,6 @@
             <p>{{ user.username }}</p>
             <p>Money: {{ user.friendly_money }}</p>
         </div>
-        <p>_____________________________________________________________________________________________________</p>
         {% if user == request_user %}
 
         {% else %}
@@ -19,7 +18,7 @@
                 Transfer money
             </button>
         {% endif %}
-
+        <p>_____________________________________________________________________________________________________</p>
 
         <!-- Modal -->
         <div class="modal fade" id="Transfer_to_{{ user }}" tabindex="-1" role="dialog"
