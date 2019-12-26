@@ -65,6 +65,7 @@ def quit(request):
     if user.room:
         user.room = None
         user.ready = False
+        user.money = None
         user.save()
         return redirect('lobby')
     else:
@@ -84,7 +85,17 @@ def del_room(request, room_id):
 
 def render_room(request, room_id):
     users = CustomUser.objects.filter(room_id=room_id)
-    return render(request, 'room.html', {'users': users, 'request_user': request.user})
+    everybody_is_ready = False
+    for user in users:
+        if user.ready:
+            everybody_is_ready = True
+        if not user.ready:
+            everybody_is_ready = False
+            break
+    if everybody_is_ready:
+        return redirect(f'../game/{room_id}')
+    else:
+        return render(request, 'room.html', {'users': users, 'request_user': request.user})
 
 
 @login_required()
@@ -92,10 +103,8 @@ def ready(request):
     user = request.user
     if user.ready:
         user.ready = False
-        user.money = None
     else:
         user.ready = True
-        user.money = user.room.start_money
     user.save()
     room = user.room
     users = CustomUser.objects.filter(room_id=room.id, ready=True)
@@ -109,6 +118,9 @@ def ready(request):
 def game(request, room_id):
     room = get_object_or_404(Room, id=room_id)
     users = CustomUser.objects.filter(room=room).order_by('pk')
+    for user in users:
+        user.money = user.room.start_money
+        user.save()
     form = MoneyForm()
     return render(request, 'game.html', {'room': room, 'users': users, 'request_user': request.user, 'form': form})
 
