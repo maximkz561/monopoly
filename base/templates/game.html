@@ -2,7 +2,10 @@
 {% block content %}
 
     <a href="{% url 'quit' %}" class="btn btn-secondary">Quit</a>
-    <a href="{% url 'increase' %}" class="btn btn-secondary">Circle</a>
+    <a href="{% url 'circle' %}" class="btn btn-secondary">Circle</a>
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#Bank">
+        Bank
+    </button>
 
     {% for user in users %}
         <div>
@@ -40,7 +43,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" form="transfer_to_{{ user }}" class="btn btn-primary">Save changes
+                        <button type="submit" form="transfer_to_{{ user }}" class="btn btn-primary">Transfer
                         </button>
                     </div>
                 </div>
@@ -48,4 +51,31 @@
         </div>
 
     {% endfor %}
+
+
+    <!-- Modal window Bank -->
+    <div class="modal fade" id="Bank" tabindex="-1" role="dialog" aria-labelledby="Bank" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="Bank">Bank</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form method="post" id="bank" action="{% url 'increase_money' %}" class="post-form">
+                        {% csrf_token %}
+                        {{ form.money }}
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" form="bank" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
 {% endblock %}

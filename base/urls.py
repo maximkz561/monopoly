@@ -14,6 +14,8 @@ urlpatterns = [
     path('room/<int:room_id>', views.render_room, name='room'),
     path('ready', views.ready, name='ready'),
     path('game/<int:room_id>', views.game, name='start_game'),
-    path('increase', views.increase, name='increase'),
-    path('transfer_money/<int:user_id>', views.transfer_money, name='transfer_money')
+    path('circle', views.circle, name='circle'),
+    path('transfer_money/<int:user_id>', views.transfer_money, name='transfer_money'),
+    path('increase_money', views.increase_money, name='increase_money'),
+    path('reduce_money', views.reduce_money, name='reduce_money'),
 ]

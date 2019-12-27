@@ -18,7 +18,7 @@ class Room(models.Model):
 
 
 class CustomUser(AbstractUser):
-    room = models.ForeignKey(Room, on_delete=models.PROTECT, null=True, blank=True)
+    room = models.ForeignKey(Room, on_delete=models.SET_NULL, null=True, blank=True)
     money = models.IntegerField(null=True, blank=True)
     ready = models.BooleanField(default=False)
 

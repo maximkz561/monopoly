@@ -76,7 +76,7 @@ def quit(request):
 def del_room(request, room_id):
     user = request.user
     room = get_object_or_404(Room, id=room_id)
-    if room.owner == user:
+    if room.owner == user or user.is_superuser:
         room.delete()
         return redirect('lobby')
     else:
@@ -103,8 +103,10 @@ def ready(request):
     user = request.user
     if user.ready:
         user.ready = False
+        user.money = None
     else:
         user.ready = True
+        user.money = user.room.start_money
     user.save()
     room = user.room
     users = CustomUser.objects.filter(room_id=room.id, ready=True)
@@ -118,18 +120,14 @@ def ready(request):
 def game(request, room_id):
     room = get_object_or_404(Room, id=room_id)
     users = CustomUser.objects.filter(room=room).order_by('pk')
-    for user in users:
-        user.money = user.room.start_money
-        user.save()
     form = MoneyForm()
     return render(request, 'game.html', {'room': room, 'users': users, 'request_user': request.user, 'form': form})
 
 
-def increase(request):
+def circle(request):
     user = request.user
     room = user.room
     user.increase(room.circle_money)
-    user.save()
     return redirect(f'game/{room.id}')
 
 
@@ -142,3 +140,17 @@ def transfer_money(request, user_id):
     recipient.save()
     room = user.room
     return redirect(f'../game/{room.id}')
+
+
+def increase_money(request):
+    user = request.user
+    money = int(request.POST.get('money'))
+    user.increase(money)
+    return redirect(f'../game/{user.room.id}')
+
+
+def reduce_money(request):
+    user = request.user
+    money = int(request.POST.get('money'))
+    user.reduce(money)
+    return redirect(f'../game/{user.room.id}')

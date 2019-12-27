@@ -18,7 +18,7 @@
                 <a href="{% url 'join_room' room_id=room.id %}" class="btn btn-secondary">Join</a>
             {% endif %}
 
-            {% if user == room.owner %}
+            {% if user == room.owner or user.is_superuser %}
                 <a href="{% url 'del_room' room_id=room.id %}" class="btn btn-dark">Delete</a>
             {% endif %}
         </div>
