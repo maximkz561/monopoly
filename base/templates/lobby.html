@@ -6,34 +6,63 @@
         Make a room
     </button>
 
-    {% for room in rooms %}
+    <div class="row row-cols-2 row-cols-md-4 mt-3">
 
-        <div>
-            {{ room }}
-            {% if room.password %}
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#JoinRoom_{{ room.id }}">
-                    Join
-                </button>
-            {% else %}
-                <a href="{% url 'join_room' room_id=room.id %}" class="btn btn-secondary">Join</a>
-            {% endif %}
+        {% for room in rooms %}
 
-            {% if user == room.owner or user.is_superuser %}
-                <a href="{% url 'del_room' room_id=room.id %}" class="btn btn-dark">Delete</a>
-            {% endif %}
-        </div>
+            {#        <div>#}
+            {#            {{ room }}#}
+            {#                        {% if room.password %}#}
+            {#                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#JoinRoom_{{ room.id }}">#}
+            {#                                Join#}
+            {#                            </button>#}
+            {#                        {% else %}#}
+            {#                            <a href="{% url 'join_room' room_id=room.id %}" class="btn btn-secondary">Join</a>#}
+            {#                        {% endif %}#}
+            {##}
+            {#                        {% if user == room.owner or user.is_superuser %}#}
+            {#                            <a href="{% url 'del_room' room_id=room.id %}" class="btn btn-dark">Delete</a>#}
+            {#                        {% endif %}#}
+            {#        </div>#}
+
+            <div class="col mb-4">
+                <div class="card border-dark">
+                    <div class="card-body">
+                        <h5 class="card-header bg-transparent border-dark"> Room {{ room }}</h5>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">Creator: {{ room.owner }}</li>
+                            <li class="list-group-item">Capacity: {{ room.capacity }}</li>
+                            <li class="list-group-item">Active: {{ room.active }}</li>
+                        </ul>
+                    </div>
+                    <div class="card-footer bg-transparent">
+                        {% if room.password %}
+                            <button type="button" class="btn btn-primary" data-toggle="modal"
+                                    data-target="#JoinRoom_{{ room.id }}">
+                                Join
+                            </button>
+                        {% endif %}
+                        {% if user == room.owner or user.is_superuser %}
+                            <a href="{% url 'join_room' room_id=room.id %}" class="btn btn-secondary">Join</a>
+                            <a href="{% url 'del_room' room_id=room.id %}" class="btn btn-dark">Delete</a>
+                        {% else %}
+                            <a href="{% url 'join_room' room_id=room.id %}"
+                               class="btn btn-secondary btn-block stretched-link">Join</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
 
 
-    {% endfor %}
-
-
+        {% endfor %}
+    </div>
     <!-- Modal for making the room -->
     <div class="modal fade" id="MakeRoom" tabindex="-1" role="dialog" aria-labelledby="MakeRoomLabel"
          aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="MakeRoomLabel">Modal title</h5>
+                    <h5 class="modal-title" id="MakeRoomLabel">Create room</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -54,7 +83,7 @@
     </div>
 
     {% for room in rooms %}
-     <!-- Modal joying room -->
+        <!-- Modal joying room -->
         <div class="modal fade" id="JoinRoom_{{ room.id }}" tabindex="-1" role="dialog" aria-labelledby="JoinRoomLabel"
              aria-hidden="true">
             <div class="modal-dialog" role="document">
@@ -74,7 +103,8 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" form="join_room_{{ room.id }}" class="btn btn-primary">Save changes</button>
+                        <button type="submit" form="join_room_{{ room.id }}" class="btn btn-primary">Save changes
+                        </button>
                     </div>
                 </div>
             </div>

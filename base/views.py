@@ -142,15 +142,27 @@ def transfer_money(request, user_id):
     return redirect(f'../game/{room.id}')
 
 
-def increase_money(request):
-    user = request.user
-    money = int(request.POST.get('money'))
-    user.increase(money)
-    return redirect(f'../game/{user.room.id}')
+# def increase_money(request):
+#     user = request.user
+#     post = request.POST
+#     money = int(request.POST.get('money'))
+#     user.increase(money)
+#     return redirect(f'../game/{user.room.id}')
+#
+#
+# def reduce_money(request):
+#     user = request.user
+#     money = int(request.POST.get('money'))
+#     user.reduce(money)
+#     return redirect(f'../game/{user.room.id}')
 
 
-def reduce_money(request):
+def bank(request):
     user = request.user
+    button_type = request.POST.get('button_type')
     money = int(request.POST.get('money'))
-    user.reduce(money)
+    if button_type == 'get':
+        user.increase(money)
+    elif button_type == 'pay':
+        user.reduce(money)
     return redirect(f'../game/{user.room.id}')

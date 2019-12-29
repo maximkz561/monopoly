@@ -1,0 +1,12 @@
+body {
+    background-color: #f0f0f0;
+}
+
+.username {
+    font-family: 'Baloo Bhaijaan', cursive;
+    font-size: 30px;
+}
+
+.content {
+    margin-top: 100px;
+}

@@ -9,7 +9,7 @@
 
     {% for user in users %}
         <div>
-            <p>{{ user.username }}</p>
+            <p class="username">{{ user.username }}</p>
             <p>Money: {{ user.friendly_money }}</p>
         </div>
         {% if user == request_user %}
@@ -64,14 +64,17 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form method="post" id="bank" action="{% url 'increase_money' %}" class="post-form">
+                    <form method="post" id="bank" action="{% url 'bank' %}" class="post-form">
                         {% csrf_token %}
                         {{ form.money }}
                     </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" form="bank" class="btn btn-primary">Save changes</button>
+                    <button type="submit" form="bank" name="button_type" value="get" class="btn btn-primary">Get money
+                    </button>
+                    <button type="submit" form="bank" name="button_type" value="pay" class="btn btn-primary">Pay money
+                    </button>
                 </div>
             </div>
         </div>
