@@ -2,6 +2,8 @@
 
 {% block content %}
     <a href="{% url 'quit' %}" class="btn btn-secondary">Quit</a>
+
+
     {% for user in users %}
         <div>
             name: {{ user }}
