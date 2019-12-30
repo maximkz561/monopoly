@@ -85,6 +85,7 @@ def del_room(request, room_id):
 
 def render_room(request, room_id):
     users = CustomUser.objects.filter(room_id=room_id)
+    room = get_object_or_404(Room, id=room_id)
     everybody_is_ready = False
     for user in users:
         if user.ready:
@@ -92,7 +93,7 @@ def render_room(request, room_id):
         if not user.ready:
             everybody_is_ready = False
             break
-    if everybody_is_ready:
+    if everybody_is_ready and room.capacity == len(users):
         return redirect(f'../game/{room_id}')
     else:
         return render(request, 'room.html', {'users': users, 'request_user': request.user})
@@ -140,21 +141,6 @@ def transfer_money(request, user_id):
     recipient.save()
     room = user.room
     return redirect(f'../game/{room.id}')
-
-
-# def increase_money(request):
-#     user = request.user
-#     post = request.POST
-#     money = int(request.POST.get('money'))
-#     user.increase(money)
-#     return redirect(f'../game/{user.room.id}')
-#
-#
-# def reduce_money(request):
-#     user = request.user
-#     money = int(request.POST.get('money'))
-#     user.reduce(money)
-#     return redirect(f'../game/{user.room.id}')
 
 
 def bank(request):

@@ -3,26 +3,38 @@
 {% block content %}
     <a href="{% url 'quit' %}" class="btn btn-secondary">Quit</a>
 
+    <div class="row row-cols-2 row-cols-md-4">
 
-    {% for user in users %}
-        <div>
-            name: {{ user }}
-        </div>
-        {% if user.ready %}
-            {% if user == request_user %}
-                <input type="button" class="btn btn-success" value="Ready"
-                       onclick="location.href = '{% url 'ready' %}'">
-            {% else %}
-                <input type="button" class="btn btn-success" value="Ready" onclick="location.href = '{% url 'ready' %}'"
-                       disabled>
-            {% endif %}
-        {% else %}
-            {% if user == request_user %}
-                <input type="button" class="btn btn-danger" value="Ready" onclick="location.href = '{% url 'ready' %}'">
-            {% else %}
-                <input type="button" class="btn btn-danger" value="Ready" onclick="location.href = '{% url 'ready' %}'"
-                       disabled>
-            {% endif %}
-        {% endif %}
-    {% endfor %}
+        {% for user in users %}
+
+            <div class="col mb-3">
+                <div class="card">
+                    <div class="card-header username bg-transparent">{{ user.username }}</div>
+                    <div class="card-body">
+                        {% if user.ready %}
+                            {% if user == request_user %}
+                                <input type="button" class="btn btn-success btn-block" value="Ready"
+                                       onclick="location.href = '{% url 'ready' %}'">
+                            {% else %}
+                                <input type="button" class="btn btn-success btn-block" value="Ready"
+                                       onclick="location.href = '{% url 'ready' %}'"
+                                       disabled>
+                            {% endif %}
+                        {% else %}
+                            {% if user == request_user %}
+                                <input type="button" class="btn btn-danger btn-block" value="Ready"
+                                       onclick="location.href = '{% url 'ready' %}'">
+                            {% else %}
+                                <input type="button" class="btn btn-danger btn-block" value="Ready"
+                                       onclick="location.href = '{% url 'ready' %}'"
+                                       disabled>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+        {% endfor %}
+
+    </div>
 {% endblock %}

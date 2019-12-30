@@ -31,4 +31,4 @@ class RoomForm(forms.ModelForm):
 
 
 class MoneyForm(forms.Form):
-    money = forms.IntegerField()
+    money = forms.IntegerField(help_text='Enter the amount of money')
