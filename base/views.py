@@ -51,9 +51,13 @@ def join_room(request, room_id):
         if room.password != request.POST.get('password'):
             raise Exception()
     user = request.user
-    user.room = room
-    user.save()
-    users = CustomUser.objects.filter(room_id=room_id)
+    if user.room != room_id:
+        if not room.active:
+            user.room = room
+            user.money = room.start_money
+            user.save()
+        else:
+            HttpResponse('Game has been already started')
     if room.active:
         return redirect(f'../game/{room_id}')
     return redirect(f'../room/{room_id}')
@@ -61,15 +65,7 @@ def join_room(request, room_id):
 
 @login_required
 def quit(request):
-    user = request.user
-    if user.room:
-        user.room = None
-        user.ready = False
-        user.money = None
-        user.save()
-        return redirect('lobby')
-    else:
-        raise Http404
+    return redirect('lobby')
 
 
 @login_required
@@ -77,6 +73,12 @@ def del_room(request, room_id):
     user = request.user
     room = get_object_or_404(Room, id=room_id)
     if room.owner == user or user.is_superuser:
+        users = CustomUser.objects.filter(room=room_id)
+        for user in users:
+            user.room = None
+            user.ready = False
+            user.money = None
+            user.save()
         room.delete()
         return redirect('lobby')
     else:
